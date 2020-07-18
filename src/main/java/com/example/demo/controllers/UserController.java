@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,11 @@ public class UserController {
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
+		if(createUserRequest.getPassword().length() < 7 || !Objects.equals(createUserRequest.getConfirmPassword(),
+				createUserRequest.getConfirmPassword())){
+			return ResponseEntity.badRequest().build();
+		}
+		user.setPassword(createUserRequest.getPassword());
 		userRepository.save(user);
 		return ResponseEntity.ok(user);
 	}

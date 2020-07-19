@@ -50,7 +50,7 @@ public class UserController {
 		cartRepository.save(cart);
 		user.setCart(cart);
 		if (createUserRequest.getPassword().length() < 7 || !Objects.equals(createUserRequest.getPassword(),
-				createUserRequest.getConfirmPassword())){
+				createUserRequest.getPasswordConfirm())){
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));

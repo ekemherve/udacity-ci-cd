@@ -85,7 +85,7 @@ public class UserControllerTest {
 
         CreateUserRequest createUserRequest = getCreatedUser();
         createUserRequest.setPassword(PASSWORD_LESS_7_CHAR);
-        createUserRequest.setConfirmPassword(HASHED_PASSWORD_LESS_7_CHAR);
+        createUserRequest.setPasswordConfirm(HASHED_PASSWORD_LESS_7_CHAR);
 
         User user = getUser();
         user.setPassword(HASHED_PASSWORD_LESS_7_CHAR);
@@ -104,7 +104,7 @@ public class UserControllerTest {
         CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setUsername(USERNAME);
         createUserRequest.setPassword(PASSWORD);
-        createUserRequest.setConfirmPassword(PASSWORD);
+        createUserRequest.setPasswordConfirm(PASSWORD);
         return createUserRequest;
     }
 

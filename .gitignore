@@ -34,3 +34,4 @@ build/
 ### Maven ####
 *mvnw
 *mvnw.cmd
+mylogfile.txt

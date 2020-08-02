@@ -41,6 +41,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             User userCredential = new ObjectMapper()
                     .readValue(req.getInputStream(), User.class);
 
+            logger.info("Trying authentication....");
             //Attempt to authenticate the user given these credentials
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -68,5 +69,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
         logger.info("Token create successfully");
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+
+        logger.error("Unable to login because of : " + failed.getMessage());
+        throw failed;
     }
 }

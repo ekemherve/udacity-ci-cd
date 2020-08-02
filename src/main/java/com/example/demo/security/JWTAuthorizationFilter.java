@@ -30,6 +30,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
+
+        logger.info("Checking for authorization......");
+
         String header = req.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
@@ -38,7 +41,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        logger.info("Attempting to authentication......");
+        logger.info("Bearer found......");
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 
         //set the spring security context with the existing credentials in the database
@@ -49,6 +52,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
+            logger.info("Token retrieved, trying to verify the token......");
             // parse the token.
             String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                     .build()
@@ -56,6 +60,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
+                logger.info("Token retrieved successfully");
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }
             return null;

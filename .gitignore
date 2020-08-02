@@ -35,3 +35,4 @@ build/
 *mvnw
 *mvnw.cmd
 mylogfile.txt
+.DS_Store

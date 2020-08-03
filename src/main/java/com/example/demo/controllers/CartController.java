@@ -38,6 +38,9 @@ public class CartController {
 	
 	@PostMapping("/addToCart")
 	public ResponseEntity<Cart> addTocart(@RequestBody ModifyCartRequest request) {
+
+		logger.info("Trying to add items to the cart");
+
 		User user = userRepository.findByUsername(request.getUsername());
 		if(user == null) {
 			logger.error("User was not found");
@@ -53,13 +56,16 @@ public class CartController {
 			.forEach(i -> cart.addItem(item.get()));
 		cartRepository.save(cart);
 
-		logger.info("Cart saved successfully \n" + cart);
+		logger.debug("Cart saved successfully \n" + cart);
 
 		return ResponseEntity.ok(cart);
 	}
 	
 	@PostMapping("/removeFromCart")
 	public ResponseEntity<Cart> removeFromcart(@RequestBody ModifyCartRequest request) {
+
+		logger.info("Trying to remove items to the cart");
+
 		User user = userRepository.findByUsername(request.getUsername());
 		if(user == null) {
 			logger.error("User was not found");
@@ -74,11 +80,11 @@ public class CartController {
 		IntStream.range(0, request.getQuantity())
 			.forEach(i -> cart.removeItem(item.get()));
 
-		logger.info("Cart before saving \n" + cart);
+		logger.debug("Cart before saving \n" + cart);
 
 		cartRepository.save(cart);
 
-		logger.info("Cart saved successfully \n" + cart);
+		logger.debug("Cart saved successfully \n" + cart);
 
 		return ResponseEntity.ok(cart);
 	}

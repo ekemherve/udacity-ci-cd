@@ -41,7 +41,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             User userCredential = new ObjectMapper()
                     .readValue(req.getInputStream(), User.class);
 
-            logger.info("Trying authentication....");
+            logger.info("Trying to login with credentials : \n" + "Username :" + userCredential.getUsername()
+                    + "\n Password : " + userCredential.getPassword());
             //Attempt to authenticate the user given these credentials
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -68,7 +69,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-        logger.info("Token create successfully");
+        logger.info("Token created successfully");
     }
 
     @Override

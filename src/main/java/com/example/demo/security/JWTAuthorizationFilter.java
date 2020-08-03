@@ -31,17 +31,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
 
-        logger.info("Checking for authorization......");
+        logger.info("Checking for user  authorization......");
 
         String header = req.getHeader(HEADER_STRING);
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-            logger.warn("Bearer not found !!!");
+            logger.warn("Bearer not found int request header !!!!");
             chain.doFilter(req, res);
             return;
         }
 
-        logger.info("Bearer found......");
+        logger.info("Bearer found ......");
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 
         //set the spring security context with the existing credentials in the database

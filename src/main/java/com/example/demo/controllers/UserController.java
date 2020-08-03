@@ -42,6 +42,9 @@ public class UserController {
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
+
+		logger.error("Method : Find by username");
+
 		User user = userRepository.findByUsername(username);
 		if (Objects.isNull(user)) {
 			logger.error("User was not found");
@@ -53,11 +56,11 @@ public class UserController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+
+		logger.error("Method : Create new user");
+
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-
-		logger.info("Username : " + user.getUsername() + "\n" + "Password : " + createUserRequest.getPassword() + "\n"
-				+ "PasswordConfirm : " + createUserRequest.getPasswordConfirm());
 
 		Cart cart = new Cart();
 		cartRepository.save(cart);
@@ -67,9 +70,14 @@ public class UserController {
 			logger.error("Password and passwordConfirm are either is inferior to 7 characters or are not equals");
 			return ResponseEntity.badRequest().build();
 		}
+
+
+		logger.info("Password and asswordConfirm before hashing : \n"
+				+ "Password : " + createUserRequest.getPassword() + "\n" + "PasswordConfirm : " + createUserRequest.getPasswordConfirm());
+
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
-		logger.info("Before saving credentials with password Hashed  : \n"
+		logger.info("Before saving credentials (password Hashed)  : \n"
 				+ "Username : " + user.getUsername() + "\n" + "Password : " + user.getPassword());
 
 		userRepository.save(user);

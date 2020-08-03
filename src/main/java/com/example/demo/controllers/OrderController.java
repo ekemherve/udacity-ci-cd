@@ -34,6 +34,9 @@ public class OrderController {
 	
 	@PostMapping("/submit/{username}")
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
+
+		logger.info("Trying to submit a new order....");
+
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
 			logger.error("User was not found");
@@ -41,21 +44,27 @@ public class OrderController {
 		}
 		UserOrder order = UserOrder.createFromCart(user.getCart());
 
-		logger.info("Order before saving \n" + order);
+		logger.debug("Order before saving \n" + order);
 
 		orderRepository.save(order);
 
-		logger.info("Order saved successfully \n" + order);
+		logger.debug("Order saved successfully \n" + order);
 		return ResponseEntity.ok(order);
 	}
 	
 	@GetMapping("/history/{username}")
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
+
+		logger.info("Trying to get user order history....");
+
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
 			logger.error("User was not found");
 			return ResponseEntity.notFound().build();
 		}
+
+		logger.info("Oders retrieved successfully");
+
 		return ResponseEntity.ok(orderRepository.findByUser(user));
 	}
 }
